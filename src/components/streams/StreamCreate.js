@@ -1,6 +1,6 @@
 import React from 'react';
 
-const StreamCreate = ()=>{
+ const StreamCreate = ()=>{
     return <div>Stram Create</div>
 }
 export default StreamCreate;
