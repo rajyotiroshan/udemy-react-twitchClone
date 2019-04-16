@@ -1,5 +1,7 @@
 import React from 'react';
 import { Field, reduxForm} from 'redux-form';
+import {connect} from 'react-redux';
+import {createStream,} from '../../actions';
 /**
  * create form for new stream creation.
  */
@@ -34,9 +36,11 @@ import { Field, reduxForm} from 'redux-form';
     }
 
     //handle form submit.
-    onSubmit(/*not called with event instead get called with existed value inside Field.*/ formValues) {
+    onSubmit = (/*not called with event instead get called with existed value inside Field.*/ formValues) => {
        // event.preventDefault();//do not need to call ,called by redux-form handleSubmit 
-        console.log(formValues);
+        //console.log(formValues);
+        //call for createStream action creator.
+        this.props.createStream(formValues);
     }
 
      render(){
@@ -73,8 +77,17 @@ const validate = (formValues)=>{
 }
 
 
-//hook up StreamCreate to reduxForm.
-export default reduxForm({
+//hook up StreamCreate and createStream action creatorto reduxForm.
+//m-1
+/* export default connect()(reduxForm({
+    form: 'streamCreate', //name of the form anything.
+    validate
+})(StreamCreate)); */
+
+//m-2
+const formWrapped = reduxForm({
     form: 'streamCreate', //name of the form anything.
     validate
 })(StreamCreate);
+
+export default connect(null, {createStream})(formWrapped);
