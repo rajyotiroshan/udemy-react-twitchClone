@@ -11,10 +11,11 @@ class GoogleAuth extends React.Component {
             //initialize the library.
             window.gapi.client.init({
                 clientId: '530995356834-4ruj6khbmt57ektbcs2jseoecordoo74.apps.googleusercontent.com',
-                scope: 'email'
+                scope: 'email'//ask user to authorize email access
         }).then(()=>{
             //library is initialized.
             this.auth = window.gapi.auth2.getAuthInstance();
+            //for first time 
             this.onAuthChange(this.auth.isSignedIn.get());
             //add listener on auth for sign in/out 
             this.auth.isSignedIn.listen(this.onAuthChange)
@@ -22,12 +23,16 @@ class GoogleAuth extends React.Component {
     });
 }
 /**
- * listen for user sign in
+ * listen for user signIn or signOut event
  */
 onAuthChange= (isSignedIn)=> {
-    if(isSignedIn) {
+    if(isSignedIn) {//user signed in
+        //update redux store by
+        //calling signIn action creator.
         this.props.signIn(this.auth.currentUser.get().getId());
     }else{
+        //user is signed out.
+        //call for signOut action creator to update redux store.
         this.props.signOut();
     }
 }
@@ -36,6 +41,8 @@ onAuthChange= (isSignedIn)=> {
  * listen for click event on sign in button.
  */
 onSignInClick = () => {
+    //update redux store
+    //call for action creator 
     this.auth.signIn();
 }
 
@@ -43,9 +50,14 @@ onSignInClick = () => {
  * listen for click event on sign out btn.
  */
 onSignOutClick = ()=>{
+    //update redux store.
+    //call for action creator.
     this.auth.signOut();
 }
 
+/**
+ * @return {button for signIn or signOut}
+ */
 renderAuthButton() {
     if(this.props.isSignedIn === null) {
         return <div>null</div>
@@ -65,7 +77,14 @@ renderAuthButton() {
     }
 }
 
-const mapStateTpProps = (state)=>{
-  return {isSignedIn: state.auth.isSignedIn};  
+/**
+ * passed redux state as props to GoogleAuth component.
+ * @param {pre redux store} state 
+ */
+const mapStateToProps = (state)=>{
+  return {isSignedIn: state.auth.isSignedIn};//update redux store.  
 }
-export default connect(mapStateTpProps,{signIn, signOut})(GoogleAuth);
+//connect to
+export default connect(
+    mapStateToProps,
+    {signIn, signOut}/* action creator as props to GoogleAuth component*/)(GoogleAuth);
