@@ -1,5 +1,8 @@
 import React from 'react';
 import { Field, reduxForm} from 'redux-form';
+/**
+ * create form for new stream creation.
+ */
  class StreamCreate extends React.Component{
 
     renderError({error, touched}){
@@ -12,7 +15,7 @@ import { Field, reduxForm} from 'redux-form';
         }
     }
     //defining std renderInput function will create a 'this' keyword context related error 
-    renderInput = ({input, label, meta})=> {
+    renderInput = ({input, label, meta})=> {//args are passed by the redux-form.
         //console.log(formProps)
         //m-1
 /*         return <input onChange={formProps.input.onChange}
@@ -51,10 +54,10 @@ import { Field, reduxForm} from 'redux-form';
 }
 
 //validate function to be wired up to redux form.
-//such that kboes to use the validate function.
+//such that knows to use the validate function.
 //get called initially or user interacts with it anyway.
 const validate = (formValues)=>{
-    const errors={};
+    const errors={};//returning an error empty object 
     if(!formValues.title) {
         //user did not enter any title.
         //errors name has an identical name as Field name property.
@@ -66,7 +69,7 @@ const validate = (formValues)=>{
     }
 
     return errors;//returning an object re-render the Component.
-    //each field renderes with erroer msg from the errors object.
+    //each field renderes with error msg from the errors object.
 }
 
 
