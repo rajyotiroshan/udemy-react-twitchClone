@@ -1,5 +1,6 @@
 import {SIGN_IN, SIGN_OUT, FETCH_STREAM,FETCH_STREAMS, CREATE_STREAM,DELETE_STREAM, EDIT_STREAM} from './ActionTypes'
-import streams from '../apis/stream'
+import streams from '../apis/stream';
+import history from '../history';
 
 export const signIn = (userId)=> {
     return{
@@ -16,9 +17,13 @@ export const signOut = ()=>{
 
 //handle stream creation.
 
-export const createStream = formValues => async dispatch=>{
-    const response = await streams.post('/streams', formValues);
-    return ({type: CREATE_STREAM, payload: response.data})
+export const createStream = formValues => async (dispatch, getState)=>{
+    const {userId} = getState().auth;
+    const response = await streams.post('/streams', {...formValues, userId});
+    dispatch({type: CREATE_STREAM, payload: response.data})
+    //programmatic navigation
+    //navigate to show list page.
+    history.push('/');
 };
 
 //handle fetching streams
@@ -48,6 +53,7 @@ export const editStream = (id, formValues)=>async dispatch=>{
     dispatch({type: EDIT_STREAM, payload: response.data});
 }
 
+//delete the stream of given id and then update the redux store with deleted id.
 export const deleteStream = (id)=> async dispatch=>{
     await streams.delete(`/streams/${id}`);
     dispatch({type: DELETE_STREAM, payload: id});
