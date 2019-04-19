@@ -1,7 +1,21 @@
 import React from 'react';
+import {connect} from 'react-redux';
+import {fetchStream} from  '../../actions/index'
+class StreamEdit extends React.Component{
 
-const StreamEdit = ()=>{
-    return <div>Stram Edit</div>
+    componentDidMount(){
+        this.props.fetchStream(this.props.match.params.id);
+    }
+
+    render(){
+        console.log(this.props);
+        return <div>Stram Edit</div>        
+    }
+
 }
 
-export default StreamEdit;
+//access redux store.
+const mapStateToProps = (state, ownProps)=>{
+    return {stream: state.streams[ownProps.match.params.id]}
+}
+export default connect(mapStateToProps,{fetchStream})(StreamEdit);
