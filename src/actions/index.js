@@ -48,9 +48,10 @@ export const fetchStream = (id)=>async dispatch=>{
 
 export const editStream = (id, formValues)=>async dispatch=>{
     //update the stream with given id with passed formValues.
-    const response = await streams.put(`/streams/${id}`, formValues);
+    const response = await streams.patch(`/streams/${id}`, formValues);
     //dispatch the action with updated data
     dispatch({type: EDIT_STREAM, payload: response.data});
+    history.push('/');
 }
 
 //delete the stream of given id and then update the redux store with deleted id.
